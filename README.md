@@ -31,6 +31,13 @@
 >
 > 🌐 **Headed browser today.** gflow drives Flow through a persistent Playwright Chromium profile, because Google's auth and reCAPTCHA gates require it. The [Architecture](#architecture--current-limitations) section shows where you can help.
 
+## Extension bridge в этом форке
+
+Отдельный `gflow-bridge` (локальная версия 0.1) координирует общую FIFO очередь для
+агента с официальным расширением Chrome: одноразовый checkpoint перед submit,
+persistent halt и пауза 25–70 секунд после завершения. Сам bridge не управляет
+браузером. Настройка, CLI/MCP контракт и ручное восстановление: [BRIDGE](docs/BRIDGE.md).
+
 ## Why gflow-cli?
 
 You have a Google account with Flow access, you have Veo credits, and you run real batch work. gflow-cli gives you:

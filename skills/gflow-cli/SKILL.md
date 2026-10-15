@@ -293,3 +293,10 @@ Documented errors agents commonly make — negative examples for the SkillOpt tr
 ## Disclaimer
 
 gflow-cli is **not affiliated with Google**. Reverse-engineered; may break when Google changes Flow's private API. Read the [DISCLAIMER](https://github.com/ffroliva/gflow-cli/blob/main/DISCLAIMER.md) before deploying in any sensitive setting.
+
+## Extension bridge этого форка
+
+
+Для workflow через официальное расширение используйте отдельный `gflow-bridge`.
+Контракт: [BRIDGE](../../docs/BRIDGE.md). Bridge только координирует агента;
+upstream auth/generation runtime не является запасным маршрутом этого workflow.

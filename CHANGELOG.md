@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Standalone `gflow-bridge` 0.1: локальный extension-only координатор с общей SQLite FIFO,
+  одноразовым durable prepare-submit, persistent halt, проверкой локальных файлов и
+  паузой 25–70 секунд после завершения; отдельные CLI и MCP stdio registry.
+  Браузерные действия выполняет агент; live generation не проверялась.
+
 ## [0.85.0] — 2026-10-14
 
 ### Added

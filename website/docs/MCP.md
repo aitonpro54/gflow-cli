@@ -4,6 +4,14 @@ This document describes the design, configuration, security model, and developer
 
 ---
 
+## Отдельный extension bridge этого форка
+
+`gflow-bridge mcp` запускает изолированную stdio registry из девяти `bridge_*` tools.
+Она координирует официальное расширение через агента и не импортирует upstream
+generation/auth runtime. Каноническая БД и ожидаемый профиль задаются только environment;
+HTTP transport и MCP reset отсутствуют. Контракт, ошибки и CLI-only операторские
+исключения описаны в [BRIDGE](BRIDGE.md). Остальная страница описывает upstream server.
+
 ## 1. Architecture
 
 The `gflow-cli` MCP server acts as a type-safe JSON-RPC interface, supporting two transport mechanisms:

@@ -627,3 +627,12 @@ gflow image t2i "test idea" --profile experiments
 | `ProfileAccessError` (exit code 11) | Chrome cannot write the profile directory (Windows access denied) | Grant write access to the whole profile directory, or use a writable profile. See [Profile-directory permissions](#profile-directory-permissions-at-browser-launch) |
 | Output files don't appear where I expect | Flag > env > .env > default — check actual resolved path | `gflow image t2i ... --verbose` shows the resolved output path |
 | `ProfileLockedError` (exit code 11) | Two concurrent calls against the same profile — the cross-process `ProfileLease` fails fast (never waits) on same-profile contention, whether the second holder is another `gflow` process, the `gflow serve` daemon, or an MCP call | Wait for the first call to finish, or use `--profile other` — different profiles run fully in parallel, each with its own lease |
+
+## Extension bridge этого форка
+
+Отдельный `gflow-bridge` читает только environment процесса: `GFLOW_BRIDGE_STATE_DB`
+(обязательный абсолютный локальный путь), `GFLOW_BRIDGE_EXPECTED_PROFILE`
+(обязательное приватное имя), `GFLOW_BRIDGE_COOLDOWN_MIN` (25),
+`GFLOW_BRIDGE_COOLDOWN_MAX` (70). Ограничение: `25 <= MIN <= MAX <= 3600`.
+Upstream `.env` и параметры профиля/транспорта на bridge не действуют.
+Полный контракт: [BRIDGE](BRIDGE.md).

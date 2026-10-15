@@ -150,6 +150,7 @@ patchright = [
 
 [project.scripts]
 gflow = "gflow_cli.cli:main"
+gflow-bridge = "gflow_cli.bridge.cli:main"
 flow = "gflow_cli.cli:main"
 # Third alias, and it earns its keep: `uvx <name>` runs the console script whose
 # name matches the *package*, so without this `uvx gflow-cli mcp run` fails with
