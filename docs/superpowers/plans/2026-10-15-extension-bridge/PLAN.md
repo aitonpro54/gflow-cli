@@ -16,16 +16,23 @@
 - [x] Проверка артефакта и идемпотентное завершение.
 - [x] Документация и конфигурационный пример без личных данных.
 - [x] Гигиена, ссылки, зеркало docs, lint/format, types, тесты/coverage, настоящая CLI/MCP проверка.
-- [ ] Независимый review diff и устранение замечаний.
-- [ ] Коммит/ветка форка, фиксация результата и ограничений.
+- [x] Независимый review diff и устранение замечаний.
+- [x] Коммит/ветка форка, фиксация результата и ограничений.
 
 ## Progress
+
+- 2026-10-15: независимые D1/D2/D3/D4/D14 и адаптивные CLI/MCP/docs/BDD проверки завершены. Исправлены exit code `invalid_state`, generated skill drift и ссылка нового документа на upstream вместо форка. Обзор исходной реализации закреплён на `f1d9dbe17493ab71f3e17f470022605958f8bd22`; исправления проверены отдельным ограниченным diff.
+- 2026-10-15: D5 portable memory не выявила противоречий; primary private memory автора upstream отсутствует. Этот пробел остаётся UNAVAILABLE, общий council verdict — YELLOW по покрытию памяти. Это не утверждение о готовности к upstream merge или релизу; результат — локальный координатор в пользовательском форке.
+
+- 2026-10-15: review P2 — CLI неверно относил `invalid_state` к ошибкам ввода и возвращал 11. Добавлен красный тест с реальным claimed заданием и преждевременным `record-started`; после исправления он возвращает 16, состояние задания остаётся claimed.
 
 - 2026-10-15: реализация разрешена пользователем. Baseline v0.85.0; локальное окружение из lockfile. Браузер, авторизация и генерация не запускались.
 
 - 2026-10-15: локальный bridge 0.1 реализован одним writer. TDD: первый прогон core дал красный ModuleNotFoundError; отдельная регрессия kind/container сначала дала 2 failed. Итог scoped: 44 passed, покрытие bridge 87.73%. Следующий этап — полные локальные gates и независимый review, затем commit.
 
 ## Decision Log
+
+- Коды CLI: только явный список ошибок ввода/конфигурации получает 11; остальные отказы состояния/хранилища получают 16. Проверка подстрок `invalid`/`required` удалена; Problem Details и MCP контракт не изменены.
 
 - Очередь самостоятельная: `generation_queue` обслуживается автоматическим upstream worker и не содержит upscale в codec.
 - Политика — одна операция за раз, случайная пауза после завершения, persistent halt, отсутствие автоматического восстановления неизвестного submit.
@@ -36,6 +43,11 @@
 - Пути только локальные: UNC/device/mapped drive, traversal и reparse ancestors запрещены. Проверка артефактов ограничена структурой контейнера и hash; full codec/визуальное качество не утверждаются.
 
 ## Validation
+
+- После review fix: 171 passed in 36.70s, bridge coverage 87.97% (порог 80%); whole-src pyright 0 ошибок, repository-wide Ruff check/format 541 файл чисты. Отдельно `tests/test_plugin_manifests.py`: 15 passed. Plugin generator `--check`: 7 файлов / 2 skills синхронны. Ссылки, website PII/mirror, hygiene и portable council memory повторно зелёные.
+- Wheel собран с новым entrypoint; ZIP-дубликатов нет, версия пакета и `__version__` совпадают. Полный upstream coverage/внешний CI/SonarCloud и живая генерация не заявляются проверенными.
+
+- Review fix: `tests/bridge/test_adapters.py` — 4 passed; регрессия `invalid_state` до исправления дала 1 failed (11 вместо 16). Scoped ruff check и format check обоих изменённых Python-файлов чисты. Проверки выполнялись только с временной тестовой БД; рабочая очередь и браузер не использовались.
 
 - База: 126 passed для worker и CLI/MCP parity/server, исходные гигиена/ссылки/docs/council checks зелёные.
 - Для новой реализации обязательны реальные subprocess CLI и MCP stdio проверки офлайн, а не только прямые вызовы обработчиков.

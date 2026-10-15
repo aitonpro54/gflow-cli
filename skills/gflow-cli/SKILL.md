@@ -296,7 +296,6 @@ gflow-cli is **not affiliated with Google**. Reverse-engineered; may break when 
 
 ## Extension bridge этого форка
 
-
 Для workflow через официальное расширение используйте отдельный `gflow-bridge`.
-Контракт: [BRIDGE](../../docs/BRIDGE.md). Bridge только координирует агента;
+Контракт: [BRIDGE](https://github.com/aitonpro54/gflow-cli/blob/codex/extension-bridge/docs/BRIDGE.md). Bridge только координирует агента;
 upstream auth/generation runtime не является запасным маршрутом этого workflow.

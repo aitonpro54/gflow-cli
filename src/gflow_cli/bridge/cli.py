@@ -10,6 +10,24 @@ from typing import Any, NoReturn
 
 from gflow_cli.bridge.service import BridgeError, BridgeService, Settings
 
+INPUT_CONFIGURATION_ERRORS = {
+    "absolute_artifact_path_required",
+    "absolute_state_db_required",
+    "configured_profile_changed",
+    "expected_profile_required",
+    "invalid_arguments",
+    "invalid_cooldown",
+    "invalid_identifier",
+    "invalid_kind",
+    "invalid_limit",
+    "invalid_reason",
+    "invalid_sha256",
+    "invalid_signal",
+    "local_artifact_path_required",
+    "local_state_db_required",
+    "operator_acknowledgement_required",
+}
+
 
 class Parser(argparse.ArgumentParser):
     def error(self, message: str) -> NoReturn:
@@ -107,7 +125,7 @@ def main(argv: Sequence[str] | None = None) -> None:
         sys.stdout.write(json.dumps(result, ensure_ascii=True) + "\n")
     except BridgeError as exc:
         sys.stdout.write(json.dumps(exc.problem(), ensure_ascii=True) + "\n")
-        raise SystemExit(11 if "required" in exc.code or "invalid" in exc.code else 16) from None
+        raise SystemExit(11 if exc.code in INPUT_CONFIGURATION_ERRORS else 16) from None
 
 
 if __name__ == "__main__":

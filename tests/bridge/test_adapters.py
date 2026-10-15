@@ -39,6 +39,32 @@ def test_cli_configuration_and_errors(tmp_path, monkeypatch, capsys):
     assert json.loads(capsys.readouterr().out)["retryable"] is False
 
 
+def test_cli_invalid_state_is_state_failure(tmp_path, monkeypatch, capsys):
+    database = tmp_path / "state.sqlite"
+    monkeypatch.setenv("GFLOW_BRIDGE_STATE_DB", str(database))
+    monkeypatch.setenv("GFLOW_BRIDGE_EXPECTED_PROFILE", "Test Profile")
+    service = BridgeService(Settings(database, "Test Profile"))
+    job = service.enqueue("video", "one", "a" * 64)
+    owned = service.claim("Test Profile", "controller")
+    with pytest.raises(SystemExit) as error:
+        main(
+            [
+                "record-started",
+                "--job-id",
+                str(job["id"]),
+                "--claim-token",
+                owned["claim_token"],
+                "--media-id",
+                "media-1",
+            ]
+        )
+    assert error.value.code == 16
+    problem = json.loads(capsys.readouterr().out)
+    assert problem["detail"] == "invalid_state"
+    assert problem["retryable"] is False
+    assert service.status(job["id"])["state"] == "claimed"
+
+
 def test_cli_mcp_parameters_and_operator_exemptions(tmp_path):
     async def run():
         service = BridgeService(Settings(tmp_path / "state.sqlite", "Test Profile"))
